@@ -1,62 +1,69 @@
 {
-  "name": "boilerplate-based-on-razzle",
-  "version": "1.0.0",
-  "license": "MIT",
-  "scripts": {
-    "start": "razzle start",
-    "build": "razzle build",
-    "start:prod": "serve -s build/public",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-    "prettier": "prettier --write ."
-  },
-  "dependencies": {
-    "effector": "^22.3.0",
-    "effector-react": "^22.0.6",
-    "react": "^18.1.0",
-    "react-dom": "^18.1.0",
-    "react-router": "^6.3.0",
-    "react-router-dom": "^6.3.0"
-  },
-  "devDependencies": {
-    "@types/node": "^17.0.35",
-    "@types/react": "^18.0.9",
-    "@types/react-dom": "^18.0.5",
-    "@types/react-router-dom": "^5.1.6",
-    "@typescript-eslint/eslint-plugin": "^5.26.0",
-    "@typescript-eslint/parser": "^5.26.0",
-    "babel-eslint": "^10.1.0",
-    "babel-preset-razzle": "^4.2.17",
-    "eslint": "^7.18.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.21.5",
-    "html-webpack-plugin": "5.2.0",
-    "husky": ">=4",
-    "lint-staged": "^12.4.2",
-    "mini-css-extract-plugin": "0.9.0",
-    "path": "^0.12.7",
-    "postcss": "8.2.4",
-    "prettier": "^2.1.2",
-    "razzle": "^4.2.17",
-    "razzle-dev-utils": "^4.2.17",
-    "razzle-plugin-eslint": "^4.2.17",
-    "razzle-plugin-scss": "^4.2.17",
-    "razzle-plugin-typescript": "^4.2.17",
-    "typescript": "^4.0.3",
-    "webpack": "5.24.0",
-    "webpack-dev-server": "3.11.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
+    "name": "boilerplate-based-on-razzle",
+    "version": "1.0.0",
+    "license": "MIT",
+    "scripts": {
+        "start": "razzle start",
+        "build": "razzle build",
+        "start:prod": "serve -s build/public",
+        "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+        "prettier": "prettier --write ."
+    },
+    "dependencies": {
+        "@date-io/date-fns": "^2.14.0",
+        "@emotion/react": "^11.9.0",
+        "@emotion/styled": "^11.8.1",
+        "@mui/material": "^5.8.1",
+        "@mui/x-date-pickers": "^5.0.0-alpha.4",
+        "date-fns": "^2.28.0",
+        "effector": "^22.3.0",
+        "effector-react": "^22.0.6",
+        "react": "^18.1.0",
+        "react-dom": "^18.1.0",
+        "react-router": "^6.3.0",
+        "react-router-dom": "^6.3.0"
+    },
+    "devDependencies": {
+        "@types/date-fns": "^2.6.0",
+        "@types/node": "^17.0.35",
+        "@types/react": "^18.0.9",
+        "@types/react-dom": "^18.0.5",
+        "@types/react-router-dom": "^5.1.6",
+        "@typescript-eslint/eslint-plugin": "^5.26.0",
+        "@typescript-eslint/parser": "^5.26.0",
+        "babel-eslint": "^10.1.0",
+        "babel-preset-razzle": "^4.2.17",
+        "eslint": "^7.18.0",
+        "eslint-config-prettier": "^8.1.0",
+        "eslint-plugin-import": "^2.22.1",
+        "eslint-plugin-jsx-a11y": "^6.3.1",
+        "eslint-plugin-prettier": "^4.0.0",
+        "eslint-plugin-react": "^7.21.5",
+        "html-webpack-plugin": "5.2.0",
+        "husky": ">=4",
+        "lint-staged": "^12.4.2",
+        "mini-css-extract-plugin": "0.9.0",
+        "path": "^0.12.7",
+        "postcss": "8.2.4",
+        "prettier": "^2.1.2",
+        "razzle": "^4.2.17",
+        "razzle-dev-utils": "^4.2.17",
+        "razzle-plugin-eslint": "^4.2.17",
+        "razzle-plugin-scss": "^4.2.17",
+        "razzle-plugin-typescript": "^4.2.17",
+        "typescript": "^4.0.3",
+        "webpack": "5.24.0",
+        "webpack-dev-server": "3.11.0"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js, ts, tsx}": [
+            "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+            "prettier --write ."
+        ]
     }
-  },
-  "lint-staged": {
-    "*.{js, ts, tsx}": [
-      "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
-      "prettier --write ."
-    ]
-  }
 }

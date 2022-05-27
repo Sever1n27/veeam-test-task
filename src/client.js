@@ -1,13 +1,19 @@
 import { App } from './App';
 import { BrowserRouter } from 'react-router-dom';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
-ReactDOM.render(
+const rootElement = document.getElementById('root');
+const root = createRoot(rootElement);
+
+root.render(
     <BrowserRouter>
-        <App />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <App />
+        </LocalizationProvider>
     </BrowserRouter>,
-    document.getElementById('root'),
 );
 
 if (module.hot) {

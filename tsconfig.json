@@ -16,13 +16,11 @@
         "noEmit": true,
         "jsx": "react",
         "paths": {
-            "@constants": ["constants"],
             "@features": ["features"],
-            "@ui": ["ui"],
-            "@core": ["core"],
+            "@ui": ["shared/ui"],
             "@pages": ["pages"],
             "@types": ["types"],
-            "@utils": ["utils"]
+            "@widgets": ["widgets"]
         }
     },
     "include": ["src/**/*"]
