@@ -6,7 +6,7 @@
         "start": "razzle start",
         "build": "razzle build",
         "start:prod": "serve -s build/public",
-        "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+        "lint": "eslint '**/*.{js,ts,tsx}' --quiet --fix",
         "prettier": "prettier --write ."
     },
     "dependencies": {
@@ -62,7 +62,7 @@
     },
     "lint-staged": {
         "*.{js, ts, tsx}": [
-            "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+            "eslint '**/*.{js,ts,tsx}' --quiet --fix",
             "prettier --write ."
         ]
     }

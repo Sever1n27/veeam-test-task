@@ -17,6 +17,7 @@ module.exports = {
                 },
             },
         },
+        'scss',
     ],
     options: {
         verbose: true,
@@ -30,6 +31,8 @@ module.exports = {
             '@types': path.resolve('./src/types/'),
             '@features': path.resolve('./src/features/'),
             '@widgets': path.resolve('./src/widgets/'),
+            '@lib': path.resolve('./src/shared/lib/'),
+            '@entities': path.resolve('./src/entities/'),
         };
         return customConfig;
     },

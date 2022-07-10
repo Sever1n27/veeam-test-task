@@ -9,13 +9,11 @@ const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
 
 root.render(
-    <BrowserRouter>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <App />
-        </LocalizationProvider>
-    </BrowserRouter>,
+    <React.StrictMode>
+        <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <App />
+            </LocalizationProvider>
+        </BrowserRouter>
+    </React.StrictMode>,
 );
-
-if (module.hot) {
-    module.hot.accept();
-}

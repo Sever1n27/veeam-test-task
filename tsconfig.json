@@ -18,9 +18,11 @@
         "paths": {
             "@features": ["features"],
             "@ui": ["shared/ui"],
+            "@lib": ["shared/lib"],
             "@pages": ["pages"],
             "@types": ["types"],
-            "@widgets": ["widgets"]
+            "@widgets": ["widgets"],
+            "@entities": ["entities"]
         }
     },
     "include": ["src/**/*"]

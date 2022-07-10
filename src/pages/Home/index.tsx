@@ -1,9 +1,5 @@
 import React from 'react';
-import Button from '@mui/material/Button';
+import { FormGeneratorFromJson } from '@features';
 export function Home() {
-    return (
-        <div>
-            <Button>Primary</Button>
-        </div>
-    );
+    return <FormGeneratorFromJson />;
 }
