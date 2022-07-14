@@ -1,7 +1,21 @@
 import { createEvent, createStore, createEffect, sample } from 'effector';
-import { isJsonString } from 'shared/lib';
+import { isJsonString } from '@lib';
 
 const INVALID_JSON_ERROR_MSG = 'not valid json string';
+
+const TAB_WIDTH = 4;
+const TAB = ' '.repeat(TAB_WIDTH);
+
+const closeChars = new Map([
+    ['{', '}'],
+    ['[', ']'],
+    ['(', ')'],
+]);
+
+const closeQuotes = new Map([
+    ['"', '"'],
+    ["'", "'"],
+]);
 
 export const submitForm = createEvent<React.FormEvent<HTMLFormElement>>();
 
@@ -15,15 +29,42 @@ export const handleChange = createEvent<React.ChangeEvent<HTMLInputElement>>();
 
 export const $errorMsg = createStore(INVALID_JSON_ERROR_MSG);
 
-export const $showErrorMsg = createStore(false);
+export const $showErrorMsg = createStore(false).on(changeFormInput, () => false);
 
 export const $formJsonInput = createStore('')
-    .on(changeFormInput, (_, e) => e.target.value)
+    .on(changeFormInput, (_, e) => {
+        return e.target.value;
+    })
     .on(handleKeyDown, (_, e) => {
+        const textArea = e.currentTarget;
+
+        // handling tab
         if (e.key === 'Tab') {
             e.preventDefault();
-            const textArea = e.currentTarget;
-            textArea.setRangeText('\t', textArea.selectionStart, textArea.selectionEnd, 'end');
+            textArea.setRangeText(TAB, textArea.selectionStart, textArea.selectionEnd, 'end');
+        }
+
+        // handling pair brackets
+        const closeChar = closeChars.get(e.key);
+        if (closeChar) {
+            e.preventDefault();
+            textArea.setRangeText(
+                e.key + '\n' + '\n' + closeChar,
+                textArea.selectionStart,
+                textArea.selectionEnd,
+                'end',
+            );
+            textArea.selectionEnd = textArea.selectionEnd - 2;
+            return e.currentTarget.value;
+        }
+
+        // handling pair quotes
+        const closeQuote = closeQuotes.get(e.key);
+        if (closeQuote) {
+            e.preventDefault();
+            textArea.setRangeText(e.key + closeQuote, textArea.selectionStart, textArea.selectionEnd, 'end');
+            textArea.selectionEnd = textArea.selectionEnd - 1;
+            return e.currentTarget.value.replace(/[']/g, '"');
         }
     });
 
@@ -43,7 +84,7 @@ sample({
 sample({
     clock: submitForm,
     source: $isFormJsonValid,
-    fn: (_, isValidJson) => !isValidJson,
+    fn: (isValid) => !isValid,
     target: $showErrorMsg,
 });
 
@@ -70,7 +111,8 @@ export const $resultFormData = createStore(null)
     .on(handleChange, (state, e) => ({
         ...state,
         [e.currentTarget.name]: e.currentTarget.type === 'checkbox' ? e.currentTarget.checked : e.currentTarget.value,
-    }));
+    }))
+    .on(submitForm, () => null);
 
 sample({
     clock: $resultFormData,

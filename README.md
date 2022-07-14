@@ -1,13 +1,11 @@
-based on razzle https://github.com/jaredpalmer/razzle
+based on vitejs with react-typescript template
 
 ## Quick Start
 
 ```bash
 yarn
-yarn start
+yarn dev
 ```
-
-Then open http://localhost:3000/ to see your app.
 
 ## Changes
 

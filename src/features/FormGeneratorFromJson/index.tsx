@@ -3,6 +3,7 @@ import { useStore } from 'effector-react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { TabPanel, a11yProps } from '@ui';
 import { Form, FormGenerator } from './ui';
 import {
@@ -13,6 +14,8 @@ import {
     $formJsonInput,
     handleChange,
     handleKeyDown,
+    $errorMsg,
+    $showErrorMsg,
 } from './model';
 
 export const FormGeneratorFromJson = () => {
@@ -20,6 +23,8 @@ export const FormGeneratorFromJson = () => {
 
     const formValues = useStore($resultFormData);
     const formGeneratorValue = useStore($formJsonInput);
+    const formError = useStore($errorMsg);
+    const showErrorMsg = useStore($showErrorMsg);
     const { label = '', items = [] } = useStore($mainForm);
 
     const handleTab = (event: React.SyntheticEvent, newValue: number) => {
@@ -41,6 +46,7 @@ export const FormGeneratorFromJson = () => {
                     keyDownHandler={handleKeyDown}
                     formState={formGeneratorValue}
                 />
+                {showErrorMsg && <Typography>{formError}</Typography>}
             </TabPanel>
             <TabPanel value={value} index={1}>
                 <Form changeHandler={handleChange} fields={items} label={label} formState={formValues} />
