@@ -18,19 +18,13 @@ const closeQuotes = new Map([
 ]);
 
 export const submitForm = createEvent<React.FormEvent<HTMLFormElement>>();
-
 export const changeFormInput = createEvent<React.ChangeEvent<HTMLTextAreaElement>>();
-
 export const handleKeyDown = createEvent<React.KeyboardEvent<HTMLTextAreaElement>>();
-
 export const updateFields = createEvent();
-
 export const handleChange = createEvent<React.ChangeEvent<HTMLInputElement>>();
 
 export const $errorMsg = createStore(INVALID_JSON_ERROR_MSG);
-
 export const $showErrorMsg = createStore(false).on(changeFormInput, () => false);
-
 export const $formJsonInput = createStore('')
     .on(changeFormInput, (_, e) => {
         return e.target.value;
@@ -69,9 +63,7 @@ export const $formJsonInput = createStore('')
     });
 
 export const $parsedFormJson = $formJsonInput.map((state) => (isJsonString(state) ? JSON.parse(state) : null));
-
 export const $mainForm = createStore({}).on(updateFields, (_, json) => json);
-
 const $isFormJsonValid = $formJsonInput.map((state) => isJsonString(state));
 
 sample({
@@ -91,7 +83,7 @@ sample({
 sample({
     clock: submitForm,
     filter: $isFormJsonValid,
-    source: $parsedFormJson.map((state) => JSON.stringify(state, undefined, 4)),
+    source: $parsedFormJson.map((state) => JSON.stringify(state, null, TAB_WIDTH)),
     target: $formJsonInput,
 });
 
@@ -100,9 +92,9 @@ submitForm.watch((e) => {
 });
 
 const saveFormFx = createEffect((data) => {
-    localStorage.setItem('form_state', JSON.stringify(data, null, 4));
+    localStorage.setItem('form_state', JSON.stringify(data, null, TAB_WIDTH));
 });
-export const loadFormFx = createEffect(() => {
+const loadFormFx = createEffect(() => {
     return JSON.parse(localStorage.getItem('form_state'));
 });
 
@@ -122,6 +114,7 @@ sample({
 loadFormFx();
 
 const testJson = {
+    title: 'Пример формы',
     items: [
         {
             type: 'text',

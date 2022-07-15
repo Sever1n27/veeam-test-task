@@ -19,27 +19,27 @@ import {
 } from './model';
 
 export const FormGeneratorFromJson = () => {
-    const [value, setValue] = React.useState(0);
+    const [tab, setTab] = React.useState(0);
 
     const formValues = useStore($resultFormData);
     const formGeneratorValue = useStore($formJsonInput);
     const formError = useStore($errorMsg);
     const showErrorMsg = useStore($showErrorMsg);
-    const { label = '', items = [] } = useStore($mainForm);
+    const { title = '', items = [] } = useStore($mainForm);
 
-    const handleTab = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue);
+    const handleTab = (event: React.SyntheticEvent, tab: number) => {
+        setTab(tab);
     };
 
     return (
         <Box sx={{ width: '100%' }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleTab} aria-label='tabs'>
+                <Tabs value={tab} onChange={handleTab} aria-label='tabs'>
                     <Tab label='Config' {...a11yProps(0)} />
                     <Tab label='Result' {...a11yProps(1)} />
                 </Tabs>
             </Box>
-            <TabPanel value={value} index={0}>
+            <TabPanel value={tab} index={0}>
                 <FormGenerator
                     submitHandler={submitForm}
                     changeHandler={changeFormInput}
@@ -48,8 +48,8 @@ export const FormGeneratorFromJson = () => {
                 />
                 {showErrorMsg && <Typography>{formError}</Typography>}
             </TabPanel>
-            <TabPanel value={value} index={1}>
-                <Form changeHandler={handleChange} fields={items} label={label} formState={formValues} />
+            <TabPanel value={tab} index={1}>
+                <Form changeHandler={handleChange} fields={items} title={title} formState={formValues} />
             </TabPanel>
         </Box>
     );
