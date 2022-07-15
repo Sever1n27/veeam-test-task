@@ -1,21 +1,43 @@
 import { createEvent, createStore, createEffect, sample } from 'effector';
 import { isJsonString } from '@lib';
+import { MainForm } from '@types';
 
 const INVALID_JSON_ERROR_MSG = 'not valid json string';
-
 const TAB_WIDTH = 4;
 const TAB = ' '.repeat(TAB_WIDTH);
-
 const closeChars = new Map([
     ['{', '}'],
     ['[', ']'],
     ['(', ')'],
 ]);
-
 const closeQuotes = new Map([
     ['"', '"'],
     ["'", "'"],
 ]);
+const testJson = {
+    title: 'Пример формы',
+    buttons: ['OK', 'Cancel', 'Apply'],
+    items: [
+        {
+            type: 'text',
+            value: '0',
+            name: 'asd',
+            label: '123123',
+        },
+        {
+            type: 'checkbox',
+            checked: false,
+            name: 'asd5',
+            label: 'checkboxxxxx',
+        },
+        {
+            type: 'multiline',
+            value: '4',
+            name: 'xddddd',
+            label: 'multilineinput',
+        },
+    ],
+};
 
 export const submitForm = createEvent<React.FormEvent<HTMLFormElement>>();
 export const changeFormInput = createEvent<React.ChangeEvent<HTMLTextAreaElement>>();
@@ -25,7 +47,7 @@ export const handleChange = createEvent<React.ChangeEvent<HTMLInputElement>>();
 
 export const $errorMsg = createStore(INVALID_JSON_ERROR_MSG);
 export const $showErrorMsg = createStore(false).on(changeFormInput, () => false);
-export const $formJsonInput = createStore('')
+export const $formJsonInput = createStore(JSON.stringify(testJson, null, 4))
     .on(changeFormInput, (_, e) => {
         return e.target.value;
     })
@@ -63,7 +85,7 @@ export const $formJsonInput = createStore('')
     });
 
 export const $parsedFormJson = $formJsonInput.map((state) => (isJsonString(state) ? JSON.parse(state) : null));
-export const $mainForm = createStore({}).on(updateFields, (_, json) => json);
+export const $mainForm = createStore<MainForm>({}).on(updateFields, (_, json) => json);
 const $isFormJsonValid = $formJsonInput.map((state) => isJsonString(state));
 
 sample({
@@ -98,7 +120,7 @@ const loadFormFx = createEffect(() => {
     return JSON.parse(localStorage.getItem('form_state'));
 });
 
-export const $resultFormData = createStore(null)
+export const $resultFormData = createStore<Record<string, string | number | boolean> | null>(null)
     .on(loadFormFx.doneData, (_, result) => result)
     .on(handleChange, (state, e) => ({
         ...state,
@@ -113,36 +135,4 @@ sample({
 
 loadFormFx();
 
-const testJson = {
-    title: 'Пример формы',
-    items: [
-        {
-            type: 'text',
-            value: '0',
-            name: 'asd',
-            label: '123123',
-        },
-        {
-            type: 'checkbox',
-            checked: false,
-            name: 'asd5',
-            label: 'checkboxxxxx',
-        },
-        {
-            type: 'multiline',
-            value: '4',
-            name: 'xddddd',
-            label: 'multilineinput',
-        },
-    ],
-};
-
 updateFields(testJson);
-
-$resultFormData.watch((state) => console.log(state));
-
-$parsedFormJson.watch((state) => console.log(state));
-
-$isFormJsonValid.watch((state) => console.log('valid', state));
-
-$showErrorMsg.watch((state) => console.log('error', state));

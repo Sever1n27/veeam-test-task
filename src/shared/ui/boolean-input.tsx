@@ -1,4 +1,11 @@
 import React from 'react';
 import Checkbox from '@mui/material/Checkbox';
+import { InputProps } from '@types';
 
-export const BooleanInput = ({ onChange, name, value }) => <Checkbox onChange={onChange} name={name} checked={value} />;
+type Props = InputProps & {
+    value?: boolean;
+};
+
+export const BooleanInput = ({ onChange, name, value }: Props) => (
+    <Checkbox onChange={onChange} name={name} checked={value} />
+);

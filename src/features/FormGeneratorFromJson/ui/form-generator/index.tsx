@@ -21,7 +21,7 @@ export const FormGenerator = ({ submitHandler, changeHandler, formState, keyDown
                 <Stack spacing={2}>
                     <textarea
                         cols={50}
-                        rows={10}
+                        rows={40}
                         name='formJson'
                         value={formState}
                         onChange={changeHandler}

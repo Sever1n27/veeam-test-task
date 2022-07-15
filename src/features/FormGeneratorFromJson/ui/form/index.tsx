@@ -2,16 +2,18 @@ import React from 'react';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { DynamicInput } from '@ui';
+import { MainForm } from '@types';
 
 type Props = {
     changeHandler: React.ChangeEventHandler<HTMLInputElement>;
-    formState: any;
-    title?: string;
-    fields: any[];
+    formState: Record<string, string | number | boolean>;
+    form: MainForm;
 };
 
-export const Form = ({ title, fields = [], formState, changeHandler }: Props) => {
+export const Form = ({ form, formState, changeHandler }: Props) => {
+    const { title = '', items = [], buttons = [] } = form;
     return (
         <Box
             sx={{
@@ -19,12 +21,21 @@ export const Form = ({ title, fields = [], formState, changeHandler }: Props) =>
             }}
         >
             {title && <Typography>{title}</Typography>}
-            {fields.map((field, i) => (
-                <Stack direction='row' key={field.name + i} alignItems='center' justifyContent='space-between'>
+            {items.map((field, i) => (
+                <Stack mt={2} direction='row' key={field.name + i} alignItems='center' justifyContent='space-between'>
                     <Typography>{field.label}</Typography>
                     <DynamicInput {...field} onChange={changeHandler} value={formState?.[field.name] ?? ''} />
                 </Stack>
             ))}
+            {buttons.length && (
+                <Stack direction='row' mt={2} spacing={2} justifyContent='flex-end'>
+                    {buttons.map((button) => (
+                        <Button variant='outlined' key={button}>
+                            {button}
+                        </Button>
+                    ))}
+                </Stack>
+            )}
         </Box>
     );
 };

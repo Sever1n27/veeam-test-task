@@ -2,11 +2,19 @@ import React from 'react';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { InputProps } from '@types';
 
-export const RadioInput = () => (
-    <RadioGroup aria-labelledby='demo-radio-buttons-group-label' defaultValue='female' name='radio-buttons-group'>
-        <FormControlLabel value='female' control={<Radio />} label='Female' />
-        <FormControlLabel value='male' control={<Radio />} label='Male' />
-        <FormControlLabel value='other' control={<Radio />} label='Other' />
+type Props = InputProps & {
+    options: {
+        value: string;
+        label: string;
+    }[];
+};
+
+export const RadioInput = ({ onChange, value, name, options }: Props) => (
+    <RadioGroup onChange={onChange} value={value} aria-labelledby='demo-radio-buttons-group-label' name={name}>
+        {options.map(({ value, label }) => (
+            <FormControlLabel key={value} value={value} control={<Radio />} label={label} />
+        ))}
     </RadioGroup>
 );

@@ -5,11 +5,12 @@ import { MultilineInput } from './multiline-input';
 import { NumberInput } from './number-input';
 import { TextInput } from './text-input';
 import { RadioInput } from './radio-input';
+import { ComponentTypes } from '@types';
 
 interface Props {
-    type?: 'number' | 'text' | 'multiline' | 'checkbox' | 'radio' | 'date';
+    type?: ComponentTypes;
     name: string;
-    value?: string | number | undefined;
+    value?: string | number | boolean;
     onChange: (value: any) => void;
 }
 
@@ -27,13 +28,11 @@ export const DynamicInput = ({ type = 'text', name, onChange, value }: Props) =>
 
     return (
         <div>
-            <div>
-                {DynamicComponent ? (
-                    <DynamicComponent label='' name={name} onChange={onChange} value={value} />
-                ) : (
-                    'Wrong component type'
-                )}
-            </div>
+            {DynamicComponent ? (
+                <DynamicComponent label='' name={name} onChange={onChange} value={value} />
+            ) : (
+                'Wrong component type'
+            )}
         </div>
     );
 };

@@ -25,7 +25,7 @@ export const FormGeneratorFromJson = () => {
     const formGeneratorValue = useStore($formJsonInput);
     const formError = useStore($errorMsg);
     const showErrorMsg = useStore($showErrorMsg);
-    const { title = '', items = [] } = useStore($mainForm);
+    const resultForm = useStore($mainForm);
 
     const handleTab = (event: React.SyntheticEvent, tab: number) => {
         setTab(tab);
@@ -49,7 +49,7 @@ export const FormGeneratorFromJson = () => {
                 {showErrorMsg && <Typography>{formError}</Typography>}
             </TabPanel>
             <TabPanel value={tab} index={1}>
-                <Form changeHandler={handleChange} fields={items} title={title} formState={formValues} />
+                <Form changeHandler={handleChange} form={resultForm} formState={formValues} />
             </TabPanel>
         </Box>
     );
