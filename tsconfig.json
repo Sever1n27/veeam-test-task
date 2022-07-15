@@ -21,9 +21,7 @@
             "@ui": ["shared/ui"],
             "@lib": ["shared/lib"],
             "@pages": ["pages"],
-            "@types": ["types"],
-            "@widgets": ["widgets"],
-            "@entities": ["entities"]
+            "@types": ["types"]
         }
     },
     "include": ["src/**/*"],
