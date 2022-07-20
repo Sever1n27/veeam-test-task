@@ -1,58 +1,25 @@
 import { createEvent, createStore, createEffect, sample } from 'effector';
 import { isJsonString } from '@lib';
-import { MainForm } from '@types';
+import { MainForm, ComponentTypes } from '@types';
+import { closeChars, closeQuotes, testJson } from './helpers';
 
-const INVALID_JSON_ERROR_MSG = 'not valid json string';
 const TAB_WIDTH = 4;
 const TAB = ' '.repeat(TAB_WIDTH);
-const closeChars = new Map([
-    ['{', '}'],
-    ['[', ']'],
-    ['(', ')'],
-]);
-const closeQuotes = new Map([
-    ['"', '"'],
-    ["'", "'"],
-]);
-const testJson = {
-    title: 'Пример формы',
-    buttons: ['OK', 'Cancel', 'Apply'],
-    items: [
-        {
-            type: 'text',
-            value: '0',
-            name: 'asd',
-            label: '123123',
-        },
-        {
-            type: 'checkbox',
-            checked: false,
-            name: 'asd5',
-            label: 'checkboxxxxx',
-        },
-        {
-            type: 'multiline',
-            value: '4',
-            name: 'xddddd',
-            label: 'multilineinput',
-        },
-    ],
-};
+const availableComponentTypes = Object.values(ComponentTypes);
 
 export const submitForm = createEvent<React.FormEvent<HTMLFormElement>>();
 export const changeFormInput = createEvent<React.ChangeEvent<HTMLTextAreaElement>>();
 export const handleKeyDown = createEvent<React.KeyboardEvent<HTMLTextAreaElement>>();
-export const updateFields = createEvent();
-export const handleChange = createEvent<React.ChangeEvent<HTMLInputElement>>();
+export const updateFields = createEvent<MainForm>();
+export const handleChange = createEvent<React.FormEvent<HTMLInputElement>>();
 
-export const $errorMsg = createStore(INVALID_JSON_ERROR_MSG);
-export const $showErrorMsg = createStore(false).on(changeFormInput, () => false);
+export const $errorMsg = createStore('').on(changeFormInput, () => '');
 export const $formJsonInput = createStore(JSON.stringify(testJson, null, 4))
     .on(changeFormInput, (_, e) => {
         return e.target.value;
     })
     .on(handleKeyDown, (_, e) => {
-        const textArea = e.currentTarget;
+        const textArea = e.target;
 
         // handling tab
         if (e.key === 'Tab') {
@@ -71,16 +38,16 @@ export const $formJsonInput = createStore(JSON.stringify(testJson, null, 4))
                 'end',
             );
             textArea.selectionEnd = textArea.selectionEnd - 2;
-            return e.currentTarget.value;
+            return textArea.value;
         }
 
-        // handling pair quotes
+        // handling pair quotes and replace single quotes
         const closeQuote = closeQuotes.get(e.key);
         if (closeQuote) {
             e.preventDefault();
             textArea.setRangeText(e.key + closeQuote, textArea.selectionStart, textArea.selectionEnd, 'end');
             textArea.selectionEnd = textArea.selectionEnd - 1;
-            return e.currentTarget.value.replace(/[']/g, '"');
+            return textArea.value.replace(/[']/g, '"');
         }
     });
 
@@ -97,9 +64,23 @@ sample({
 
 sample({
     clock: submitForm,
-    source: $isFormJsonValid,
-    fn: (isValid) => !isValid,
-    target: $showErrorMsg,
+    source: [$parsedFormJson, $isFormJsonValid],
+    fn: ([form, isValid]) => {
+        if (!isValid) return 'invalid json string';
+        const items = form.items;
+        const hasWrongComponentType = !items.every(({ type }: { type: ComponentTypes }) =>
+            availableComponentTypes.includes(type),
+        );
+        const missingLabelsOrNames = !items.every(({ label, name }: { label?: string; name?: string }) =>
+            Boolean(label && name),
+        );
+        return hasWrongComponentType
+            ? 'wrong component type presents'
+            : missingLabelsOrNames
+            ? 'some fields missing name or label'
+            : '';
+    },
+    target: $errorMsg,
 });
 
 sample({
@@ -113,14 +94,15 @@ submitForm.watch((e) => {
     e.preventDefault();
 });
 
-const saveFormFx = createEffect((data) => {
+const saveFormFx = createEffect((data: MainForm | null) => {
     localStorage.setItem('form_state', JSON.stringify(data, null, TAB_WIDTH));
 });
 const loadFormFx = createEffect(() => {
-    return JSON.parse(localStorage.getItem('form_state'));
+    const data = localStorage.getItem('form_state');
+    return data ? JSON.parse(data) : null;
 });
 
-export const $resultFormData = createStore<Record<string, string | number | boolean> | null>(null)
+export const $resultFormData = createStore<Record<string, string | boolean> | null>(null)
     .on(loadFormFx.doneData, (_, result) => result)
     .on(handleChange, (state, e) => ({
         ...state,
@@ -131,6 +113,21 @@ export const $resultFormData = createStore<Record<string, string | number | bool
 sample({
     clock: $resultFormData,
     target: saveFormFx,
+});
+
+sample({
+    clock: updateFields,
+    filter: $isFormJsonValid,
+    source: $parsedFormJson.map((state) =>
+        state.items.reduce(
+            (acc: Record<string, string>, curr: { name: string; value: string }) => ({
+                ...acc,
+                [curr.name]: curr.value,
+            }),
+            {},
+        ),
+    ),
+    target: $resultFormData,
 });
 
 loadFormFx();

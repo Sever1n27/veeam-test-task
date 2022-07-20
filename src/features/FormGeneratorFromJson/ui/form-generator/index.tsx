@@ -2,15 +2,18 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 type Props = {
     submitHandler: React.FormEventHandler<HTMLFormElement>;
     changeHandler: React.ChangeEventHandler<HTMLTextAreaElement>;
     keyDownHandler: React.KeyboardEventHandler<HTMLTextAreaElement>;
-    formState: any;
+    formState: string;
+    error?: string;
 };
 
-export const FormGenerator = ({ submitHandler, changeHandler, formState, keyDownHandler }: Props) => {
+export const FormGenerator = ({ submitHandler, changeHandler, formState, keyDownHandler, error }: Props) => {
     return (
         <Box
             sx={{
@@ -32,6 +35,13 @@ export const FormGenerator = ({ submitHandler, changeHandler, formState, keyDown
                     </Button>
                 </Stack>
             </form>
+            {error && (
+                <Snackbar open={true}>
+                    <MuiAlert elevation={3} severity='error' sx={{ width: '100%' }}>
+                        {error}
+                    </MuiAlert>
+                </Snackbar>
+            )}
         </Box>
     );
 };

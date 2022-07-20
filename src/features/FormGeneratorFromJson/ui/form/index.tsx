@@ -7,8 +7,8 @@ import { DynamicInput } from '@ui';
 import { MainForm } from '@types';
 
 type Props = {
-    changeHandler: React.ChangeEventHandler<HTMLInputElement>;
-    formState: Record<string, string | number | boolean>;
+    changeHandler: (e: React.FormEvent<HTMLInputElement>) => void;
+    formState: Record<string, string | boolean> | null;
     form: MainForm;
 };
 

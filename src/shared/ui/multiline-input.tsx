@@ -6,9 +6,8 @@ interface Props extends InputProps {
     minRows?: number;
 }
 
-export const MultilineInput = ({ label, variant, maxRows, minRows, onChange, name, value }: Props) => (
+export const MultilineInput = ({ variant, maxRows, minRows = 5, onChange, name, value }: Props) => (
     <TextField
-        label={label}
         variant={variant}
         multiline
         maxRows={maxRows}

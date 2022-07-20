@@ -5,13 +5,14 @@ import { MultilineInput } from './multiline-input';
 import { NumberInput } from './number-input';
 import { TextInput } from './text-input';
 import { RadioInput } from './radio-input';
-import { ComponentTypes } from '@types';
+import { ComponentTypes, BasicPrimitive } from '@types';
 
 interface Props {
     type?: ComponentTypes;
     name: string;
-    value?: string | number | boolean;
-    onChange: (value: any) => void;
+    value?: BasicPrimitive;
+    onChange: (e: React.FormEvent<HTMLInputElement>) => void;
+    options?: { value: string; label: string }[];
 }
 
 const componentsMapping = {
@@ -23,13 +24,12 @@ const componentsMapping = {
     radio: RadioInput,
 };
 
-export const DynamicInput = ({ type = 'text', name, onChange, value }: Props) => {
+export const DynamicInput = ({ type = ComponentTypes.Text, name, onChange, value, options }: Props) => {
     const DynamicComponent = componentsMapping[type];
-
     return (
         <div>
             {DynamicComponent ? (
-                <DynamicComponent label='' name={name} onChange={onChange} value={value} />
+                <DynamicComponent name={name} onChange={onChange} value={value} options={options} />
             ) : (
                 'Wrong component type'
             )}
