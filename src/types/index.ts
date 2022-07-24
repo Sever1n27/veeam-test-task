@@ -18,8 +18,8 @@ export enum ComponentTypes {
 }
 
 export type Field = {
-    label?: string;
-    name?: string;
+    label: string;
+    name: string;
     type: ComponentTypes;
     value?: string;
     checked?: boolean;

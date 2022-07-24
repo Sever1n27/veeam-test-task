@@ -24,6 +24,7 @@ const fieldsWithMissingNames = [
         type: 'text' as ComponentTypes,
         label: '123',
         value: 'text',
+        name: '',
     },
 ];
 
