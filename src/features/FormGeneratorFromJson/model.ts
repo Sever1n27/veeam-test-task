@@ -83,9 +83,7 @@ sample({
     fn: ([form, isValid]) => {
         if (!isValid) return 'invalid json string';
         const { items }: { items: Field[] } = form;
-        const hasWrongComponentType = !items.every(({ type }: { type: ComponentTypes }) =>
-            availableComponentTypes.includes(type),
-        );
+        const hasWrongComponentType = !items.every(({ type }) => availableComponentTypes.includes(type));
         const missingLabelsOrNames = !items.every(({ label, name }: { label?: string; name?: string }) =>
             Boolean(label && name),
         );
