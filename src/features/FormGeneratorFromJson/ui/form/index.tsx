@@ -26,7 +26,7 @@ export function Form({ form, formState, changeHandler }: Props) {
                     <Box sx={{ minWidth: 250 }}>
                         <Typography>{field.label}</Typography>
                     </Box>
-                    <DynamicInput {...field} onChange={changeHandler} value={formState?.[field.name] ?? ''} />
+                    <DynamicInput {...field} onChange={changeHandler} value={formState} />
                 </Stack>
             ))}
             {buttons.length && (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ComponentTypes, BasicPrimitive } from '@types';
+import { ComponentTypes } from '@types';
 import { BooleanInput } from './boolean-input';
 import { DateInput } from './date-input';
 import { MultilineInput } from './multiline-input';
@@ -10,7 +10,7 @@ import { RadioInput } from './radio-input';
 interface Props {
     type?: ComponentTypes;
     name: string;
-    value?: BasicPrimitive;
+    value: Record<string, string | boolean> | null;
     onChange: (e: React.FormEvent<HTMLInputElement>) => void;
     options?: { value: string; label: string }[];
 }
@@ -26,10 +26,11 @@ const componentsMapping = {
 
 export function DynamicInput({ type = ComponentTypes.Text, name, onChange, value, options }: Props) {
     const DynamicComponent = componentsMapping[type];
+    const inputValue = value?.[name] ?? '';
     return (
         <div>
             {DynamicComponent ? (
-                <DynamicComponent name={name} onChange={onChange} value={value} options={options} />
+                <DynamicComponent name={name} onChange={onChange} value={inputValue} options={options} />
             ) : (
                 'Wrong component type'
             )}
