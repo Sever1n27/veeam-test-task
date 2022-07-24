@@ -1,4 +1,6 @@
-import { MainForm, ComponentTypes } from '@types';
+import { MainForm, ComponentTypes, Field } from '@types';
+
+const availableComponentTypes = Object.values(ComponentTypes);
 
 export const closeChars = new Map([
     ['{', '}'],
@@ -47,3 +49,11 @@ export const testJson: MainForm = {
         },
     ],
 };
+
+export const hasWrongComponentType = (items: Field[]) =>
+    !items.every((item) => availableComponentTypes.includes(item.type));
+
+export const missingLabelsOrNames = (items: Field[]) =>
+    !items.every(({ label, name }: { label?: string; name?: string }) => Boolean(label && name));
+
+export const formatJson = (data: MainForm | null, tabWidth: number) => JSON.stringify(data, null, tabWidth);

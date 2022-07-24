@@ -1,13 +1,12 @@
 import { createEvent, createStore, createEffect, sample, combine } from 'effector';
 import { debounce } from 'patronum/debounce';
 import { isJsonString } from '@lib';
-import { MainForm, ComponentTypes, Field } from '@types';
-import { closeChars, closeQuotes, testJson } from './helpers';
+import { MainForm, Field } from '@types';
+import { closeChars, closeQuotes, testJson, hasWrongComponentType, missingLabelsOrNames, formatJson } from './helpers';
 
 const TAB_WIDTH = 4;
 const TAB = ' '.repeat(TAB_WIDTH);
 const NOTIFICATION_TIMEOUT = 4000;
-const availableComponentTypes = Object.values(ComponentTypes);
 export const successMessage = 'form succesfully generated u can see it in Result tab';
 
 export const submitForm = createEvent<React.FormEvent<HTMLFormElement>>();
@@ -83,14 +82,10 @@ sample({
     fn: ([form, isValid]) => {
         if (!isValid) return 'invalid json string';
         const { items }: { items: Field[] } = form;
-        const hasWrongComponentType = !items.every(({ type }) => availableComponentTypes.includes(type));
-        const missingLabelsOrNames = !items.every(({ label, name }: { label?: string; name?: string }) =>
-            Boolean(label && name),
-        );
-        if (hasWrongComponentType) {
+        if (hasWrongComponentType(items)) {
             return 'wrong component type presents';
         }
-        if (missingLabelsOrNames) {
+        if (missingLabelsOrNames(items)) {
             return 'some fields missing name or label';
         }
         return '';
@@ -101,7 +96,7 @@ sample({
 // format json in textarea after submit
 sample({
     clock: submitForm,
-    source: $parsedFormJson.map((state) => JSON.stringify(state, null, TAB_WIDTH)),
+    source: $parsedFormJson.map((state) => formatJson(state, TAB_WIDTH)),
     filter: $isValidForm,
     target: $formJsonInput,
 });
@@ -123,7 +118,7 @@ submitForm.watch((e) => {
 });
 
 const saveFormFx = createEffect((data: MainForm | null) => {
-    localStorage.setItem('form_state', JSON.stringify(data, null, TAB_WIDTH));
+    localStorage.setItem('form_state', formatJson(data, TAB_WIDTH));
 });
 const loadFormFx = createEffect(() => {
     const data = localStorage.getItem('form_state');
