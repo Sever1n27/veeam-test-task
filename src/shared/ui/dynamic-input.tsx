@@ -1,11 +1,11 @@
 import React from 'react';
+import { ComponentTypes, BasicPrimitive } from '@types';
 import { BooleanInput } from './boolean-input';
 import { DateInput } from './date-input';
 import { MultilineInput } from './multiline-input';
 import { NumberInput } from './number-input';
 import { TextInput } from './text-input';
 import { RadioInput } from './radio-input';
-import { ComponentTypes, BasicPrimitive } from '@types';
 
 interface Props {
     type?: ComponentTypes;
@@ -24,7 +24,7 @@ const componentsMapping = {
     radio: RadioInput,
 };
 
-export const DynamicInput = ({ type = ComponentTypes.Text, name, onChange, value, options }: Props) => {
+export function DynamicInput({ type = ComponentTypes.Text, name, onChange, value, options }: Props) {
     const DynamicComponent = componentsMapping[type];
     return (
         <div>
@@ -35,4 +35,4 @@ export const DynamicInput = ({ type = ComponentTypes.Text, name, onChange, value
             )}
         </div>
     );
-};
+}

@@ -12,7 +12,7 @@ type Props = {
     form: MainForm;
 };
 
-export const Form = ({ form, formState, changeHandler }: Props) => {
+export function Form({ form, formState, changeHandler }: Props) {
     const { title = '', items = [], buttons = [] } = form;
     return (
         <Box
@@ -21,9 +21,11 @@ export const Form = ({ form, formState, changeHandler }: Props) => {
             }}
         >
             {title && <Typography>{title}</Typography>}
-            {items.map((field, i) => (
-                <Stack mt={2} direction='row' key={field.name + i} alignItems='center' justifyContent='space-between'>
-                    <Typography>{field.label}</Typography>
+            {items.map((field) => (
+                <Stack mt={2} direction='row' key={field.name} alignItems='center'>
+                    <Box sx={{ minWidth: 250 }}>
+                        <Typography>{field.label}</Typography>
+                    </Box>
                     <DynamicInput {...field} onChange={changeHandler} value={formState?.[field.name] ?? ''} />
                 </Stack>
             ))}
@@ -38,4 +40,4 @@ export const Form = ({ form, formState, changeHandler }: Props) => {
             )}
         </Box>
     );
-};
+}

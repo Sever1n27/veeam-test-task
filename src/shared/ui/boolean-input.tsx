@@ -6,6 +6,6 @@ type Props = InputProps & {
     checked?: boolean;
 };
 
-export const BooleanInput = ({ onChange, name, checked }: Props) => (
-    <Checkbox onChange={onChange} name={name} checked={checked} />
-);
+export function BooleanInput({ onChange, name, checked }: Props) {
+    return <Checkbox onChange={onChange} name={name} checked={checked} />;
+}

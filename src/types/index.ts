@@ -17,7 +17,7 @@ export enum ComponentTypes {
     Date = 'date',
 }
 
-type Field = {
+export type Field = {
     label: string;
     name: string;
     type?: ComponentTypes;

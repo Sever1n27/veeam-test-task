@@ -11,11 +11,18 @@ type Props = InputProps & {
     }[];
 };
 
-export const RadioInput = ({ onChange, value, name, options }: Props) => (
-    <RadioGroup onChange={onChange} value={value} aria-labelledby='radio-buttons-group-label' name={name}>
-        {options &&
-            options.map(({ value, label }) => (
-                <FormControlLabel key={value} value={value} control={<Radio />} label={label} />
-            ))}
-    </RadioGroup>
-);
+export function RadioInput({ onChange, value, name, options }: Props) {
+    return (
+        <RadioGroup onChange={onChange} value={value} aria-labelledby='radio-buttons-group-label' name={name}>
+            {options &&
+                options.map((option) => (
+                    <FormControlLabel
+                        key={option.value}
+                        value={option.value}
+                        control={<Radio />}
+                        label={option.label}
+                    />
+                ))}
+        </RadioGroup>
+    );
+}
