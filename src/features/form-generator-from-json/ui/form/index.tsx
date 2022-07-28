@@ -3,17 +3,14 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import { useStore } from 'effector-react';
 import { DynamicInput } from '@ui';
 import { MainForm } from '@types';
+import { handleChange, $resultFormData } from './model';
 
-type Props = {
-    changeHandler: (e: React.FormEvent<HTMLInputElement>) => void;
-    formState: Record<string, string | boolean> | null;
-    form: MainForm;
-};
-
-export function Form({ form, formState, changeHandler }: Props) {
+export function Form({ form }: { form: MainForm }) {
     const { title = '', items = [], buttons = [] } = form;
+    const formValues = useStore($resultFormData);
     return (
         <Box
             sx={{
@@ -26,7 +23,7 @@ export function Form({ form, formState, changeHandler }: Props) {
                     <Box sx={{ minWidth: 250 }}>
                         <Typography>{field.label}</Typography>
                     </Box>
-                    <DynamicInput {...field} onChange={changeHandler} value={formState} />
+                    <DynamicInput {...field} onChange={handleChange} value={formValues} />
                 </Stack>
             ))}
             {buttons.length && (

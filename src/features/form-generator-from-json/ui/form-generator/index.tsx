@@ -2,30 +2,26 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import { useStore } from 'effector-react';
+import { submitForm, handleChange, handleKeyDown, $jsonInputValue } from './model';
 
-type Props = {
-    submitHandler: React.FormEventHandler<HTMLFormElement>;
-    changeHandler: React.ChangeEventHandler<HTMLTextAreaElement>;
-    keyDownHandler: React.KeyboardEventHandler<HTMLTextAreaElement>;
-    formState: string;
-};
-
-export function FormGenerator({ submitHandler, changeHandler, formState, keyDownHandler }: Props) {
+export function FormGenerator() {
+    const inputValue = useStore($jsonInputValue);
     return (
         <Box
             sx={{
                 width: '50%',
             }}
         >
-            <form onSubmit={submitHandler}>
+            <form onSubmit={submitForm}>
                 <Stack spacing={2}>
                     <textarea
                         cols={50}
                         rows={40}
                         name='formJson'
-                        value={formState}
-                        onChange={changeHandler}
-                        onKeyDown={keyDownHandler}
+                        value={inputValue}
+                        onChange={handleChange}
+                        onKeyDown={handleKeyDown}
                     />
                     <Button type='submit' variant='outlined'>
                         Apply

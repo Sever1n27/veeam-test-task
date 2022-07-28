@@ -50,10 +50,14 @@ export const testJson: MainForm = {
     ],
 };
 
-export const hasWrongComponentType = (items: Field[]) =>
-    !items.every((item) => availableComponentTypes.includes(item.type));
+export const hasWrongComponentType = (items?: Field[]) => {
+    if (!items) return false;
+    return !items.every((item) => availableComponentTypes.includes(item.type));
+};
 
-export const missingLabelsOrNames = (items: Field[]) =>
-    !items.every(({ label, name }: { label?: string; name?: string }) => Boolean(label && name));
+export const missingLabelsOrNames = (items?: Field[]) => {
+    if (!items) return false;
+    return !items.every(({ label, name }: { label?: string; name?: string }) => Boolean(label && name));
+};
 
 export const formatJson = (data: MainForm | null, tabWidth: number) => JSON.stringify(data, null, tabWidth);

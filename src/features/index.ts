@@ -1,1 +1,1 @@
-export * from './FormGeneratorFromJson';
+export * from './form-generator-from-json';

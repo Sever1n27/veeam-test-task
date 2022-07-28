@@ -18,6 +18,7 @@
         "jsx": "react-jsx",
         "paths": {
             "@features": ["features"],
+            "@entities": ["entities"],
             "@ui": ["shared/ui"],
             "@lib": ["shared/lib"],
             "@pages": ["pages"],
