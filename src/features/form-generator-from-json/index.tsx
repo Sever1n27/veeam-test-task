@@ -29,7 +29,7 @@ export function FormGeneratorFromJson() {
                 <FormGenerator />
             </TabPanel>
             <TabPanel value={currentTab} index={1}>
-                <Form form={form} />
+                {form && <Form form={form} />}
             </TabPanel>
         </Box>
     );

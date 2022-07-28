@@ -10,6 +10,7 @@ import {
     hasWrongComponentType,
     missingLabelsOrNames,
 } from '../../helpers';
+import text from './text.json';
 
 const TAB_WIDTH = 4;
 const TAB = ' '.repeat(TAB_WIDTH);
@@ -17,7 +18,7 @@ const TAB = ' '.repeat(TAB_WIDTH);
 export const submitForm = createEvent<React.FormEvent<HTMLFormElement>>();
 export const handleChange = createEvent<React.ChangeEvent<HTMLTextAreaElement>>();
 export const handleKeyDown = createEvent<React.KeyboardEvent<HTMLTextAreaElement>>();
-export const updateFields = createEvent();
+export const updateFields = createEvent<MainForm | null>();
 
 export const $jsonInputValue = createStore(JSON.stringify(testJson, null, 4))
     .on(handleChange, (_, e) => {
@@ -49,7 +50,7 @@ export const $jsonInputValue = createStore(JSON.stringify(testJson, null, 4))
         return textArea.value;
     });
 
-export const $mainForm = createStore<MainForm>({}).on(updateFields, (_, json) => json);
+export const $mainForm = createStore<MainForm | null>({}).on(updateFields, (_, json) => json);
 export const $isFormJsonValid = sample({
     clock: submitForm,
     source: $jsonInputValue,
@@ -88,23 +89,23 @@ const { invalidJson, hasWrongTypes, missingLabels, validForm } = split($parsedFo
 
 sample({
     clock: hasWrongTypes,
-    target: notify.prepend(() => ({ message: 'Wrong component type presents', type: 'error' })),
+    target: notify.prepend(() => ({ message: text.wrongComponentMessage, type: 'error' })),
 });
 
 sample({
     clock: missingLabels,
-    target: notify.prepend(() => ({ message: 'Has missing labels or names', type: 'error' })),
+    target: notify.prepend(() => ({ message: text.missingLabelOrNameMessage, type: 'error' })),
 });
 
 sample({
     clock: invalidJson,
-    target: notify.prepend(() => ({ message: 'Invalid json string', type: 'error' })),
+    target: notify.prepend(() => ({ message: text.invalidJsonMessage, type: 'error' })),
 });
 
 sample({
     clock: validForm,
     target: notify.prepend(() => ({
-        message: 'Form successfully generated you can see it in Result tab',
+        message: text.successMessage,
         type: 'success',
     })),
 });

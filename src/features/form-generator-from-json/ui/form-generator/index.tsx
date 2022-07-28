@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { useStore } from 'effector-react';
 import { submitForm, handleChange, handleKeyDown, $jsonInputValue } from './model';
+import text from './text.json';
 
 export function FormGenerator() {
     const inputValue = useStore($jsonInputValue);
@@ -24,7 +25,7 @@ export function FormGenerator() {
                         onKeyDown={handleKeyDown}
                     />
                     <Button type='submit' variant='outlined'>
-                        Apply
+                        {text.button}
                     </Button>
                 </Stack>
             </form>

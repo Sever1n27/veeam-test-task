@@ -1,0 +1,7 @@
+{
+    "button": "Apply",
+    "wrongComponentMessage": "Wrong component type presents",
+    "missingLabelOrNameMessage": "Missing labels or names",
+    "invalidJsonMessage": "Invalid JSON string",
+    "successMessage": "Form successfully generated u can see it in Result tab"
+}

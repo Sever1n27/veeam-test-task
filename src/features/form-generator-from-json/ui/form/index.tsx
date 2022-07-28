@@ -26,7 +26,7 @@ export function Form({ form }: { form: MainForm }) {
                     <DynamicInput {...field} onChange={handleChange} value={formValues} />
                 </Stack>
             ))}
-            {buttons.length && (
+            {buttons.length > 0 && (
                 <Stack direction='row' mt={2} spacing={2} justifyContent='flex-end'>
                     {buttons.map((button) => (
                         <Button variant='outlined' key={button}>
