@@ -18,7 +18,7 @@ const TAB = ' '.repeat(TAB_WIDTH);
 export const submitForm = createEvent<React.FormEvent<HTMLFormElement>>();
 export const handleChange = createEvent<React.ChangeEvent<HTMLTextAreaElement>>();
 export const handleKeyDown = createEvent<React.KeyboardEvent<HTMLTextAreaElement>>();
-export const updateFields = createEvent<MainForm | null>();
+export const updateFields = createEvent<MainForm>();
 
 export const $jsonInputValue = createStore(JSON.stringify(testJson, null, 4))
     .on(handleChange, (_, e) => {
@@ -50,19 +50,19 @@ export const $jsonInputValue = createStore(JSON.stringify(testJson, null, 4))
         return textArea.value;
     });
 
-export const $mainForm = createStore<MainForm | null>({}).on(updateFields, (_, json) => json);
+export const $mainForm = createStore<MainForm>({}).on(updateFields, (_, json) => json);
 export const $isFormJsonValid = sample({
     clock: submitForm,
     source: $jsonInputValue,
     fn: (data) => isJsonString(data),
 });
 
-export const $parsedFormJson = createStore<MainForm | null>(null);
+export const $parsedFormJson = createStore<MainForm>({});
 
 sample({
     clock: submitForm,
     source: $jsonInputValue,
-    fn: (data) => (isJsonString(data) ? JSON.parse(data) : null),
+    fn: (data) => (isJsonString(data) ? JSON.parse(data) : {}),
     target: $parsedFormJson,
 });
 

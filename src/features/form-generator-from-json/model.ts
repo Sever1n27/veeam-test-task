@@ -7,13 +7,15 @@ export { updateFields, $mainForm };
 sample({
     clock: updateFields,
     source: $parsedFormJson.map((state) =>
-        state?.items?.reduce(
-            (acc: Record<string, string>, curr: { name: string; value: string }) => ({
-                ...acc,
-                [curr.name]: curr.value,
-            }),
-            {},
-        ),
+        state?.items
+            ? state.items.reduce(
+                  (acc, field) => ({
+                      ...acc,
+                      [field.name]: field.value,
+                  }),
+                  {},
+              )
+            : {},
     ),
     filter: $isFormJsonValid,
     target: $resultFormData,

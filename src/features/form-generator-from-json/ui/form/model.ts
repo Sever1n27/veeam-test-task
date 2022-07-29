@@ -6,7 +6,7 @@ const TAB_WIDTH = 4;
 
 export const handleChange = createEvent<React.FormEvent<HTMLInputElement>>();
 
-const saveFormFx = createEffect((data: MainForm | null) => {
+const saveFormFx = createEffect((data: MainForm) => {
     localStorage.setItem('form_state', formatJson(data, TAB_WIDTH));
 });
 const loadFormFx = createEffect(() => {
@@ -15,7 +15,7 @@ const loadFormFx = createEffect(() => {
 });
 
 export const $form = createStore<MainForm>({});
-export const $resultFormData = createStore<Record<string, string | boolean> | null>(null)
+export const $resultFormData = createStore<Record<string, string | boolean>>({})
     .on(loadFormFx.doneData, (_, result) => result)
     .on(handleChange, (state, e) => ({
         ...state,
