@@ -6,11 +6,11 @@ import Button from '@mui/material/Button';
 import { useStore } from 'effector-react';
 import { DynamicInput } from '@ui';
 import { MainForm } from '@types';
-import { handleChange, $resultFormData } from './model';
+import { inputChanged, $formValues } from './model';
 
 export function Form({ form }: { form: MainForm }) {
     const { title = '', items = [], buttons = [] } = form;
-    const formValues = useStore($resultFormData);
+    const formValues = useStore($formValues);
     return (
         <Box
             sx={{
@@ -23,7 +23,7 @@ export function Form({ form }: { form: MainForm }) {
                     <Box sx={{ minWidth: 250 }}>
                         <Typography>{field.label}</Typography>
                     </Box>
-                    <DynamicInput {...field} onChange={handleChange} value={formValues} />
+                    <DynamicInput {...field} onChange={inputChanged} value={formValues} />
                 </Stack>
             ))}
             {buttons.length > 0 && (

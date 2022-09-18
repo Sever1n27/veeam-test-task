@@ -15,16 +15,16 @@ import text from './text.json';
 const TAB_WIDTH = 4;
 const TAB = ' '.repeat(TAB_WIDTH);
 
-export const submitForm = createEvent<React.FormEvent<HTMLFormElement>>();
-export const handleChange = createEvent<React.ChangeEvent<HTMLTextAreaElement>>();
-export const handleKeyDown = createEvent<React.KeyboardEvent<HTMLTextAreaElement>>();
-export const updateFields = createEvent<MainForm>();
+const formSubmited = createEvent<React.FormEvent<HTMLFormElement>>();
+const inputChanged = createEvent<React.ChangeEvent<HTMLTextAreaElement>>();
+const keyPressed = createEvent<React.KeyboardEvent<HTMLTextAreaElement>>();
+const fieldsUpdated = createEvent<MainForm>();
 
-export const $jsonInputValue = createStore(JSON.stringify(testJson, null, 4))
-    .on(handleChange, (_, e) => {
+const $jsonInputValue = createStore(JSON.stringify(testJson, null, 4))
+    .on(inputChanged, (_, e) => {
         return e.target.value;
     })
-    .on(handleKeyDown, (_, e) => {
+    .on(keyPressed, (_, e) => {
         const textArea = e.target as HTMLTextAreaElement;
         // handling tab
         if (e.key === 'Tab') {
@@ -50,17 +50,17 @@ export const $jsonInputValue = createStore(JSON.stringify(testJson, null, 4))
         return textArea.value;
     });
 
-export const $mainForm = createStore<MainForm>({}).on(updateFields, (_, json) => json);
-export const $isFormJsonValid = sample({
-    clock: submitForm,
+const $mainForm = createStore<MainForm>({}).on(fieldsUpdated, (_, json) => json);
+const $isFormJsonValid = sample({
+    clock: formSubmited,
     source: $jsonInputValue,
     fn: (data) => isJsonString(data),
 });
 
-export const $parsedFormJson = createStore<MainForm>({});
+const $parsedFormJson = createStore<MainForm>({});
 
 sample({
-    clock: submitForm,
+    clock: formSubmited,
     source: $jsonInputValue,
     fn: (data) => (isJsonString(data) ? JSON.parse(data) : {}),
     target: $parsedFormJson,
@@ -69,12 +69,12 @@ sample({
 sample({
     clock: $parsedFormJson,
     filter: $isFormJsonValid,
-    target: updateFields,
+    target: fieldsUpdated,
 });
 
 // format json in textarea after submit
 sample({
-    clock: submitForm,
+    clock: formSubmited,
     source: $parsedFormJson.map((state) => formatJson(state, TAB_WIDTH)),
     filter: $isFormJsonValid,
     target: $jsonInputValue,
@@ -110,6 +110,17 @@ sample({
     })),
 });
 
-submitForm.watch((e) => {
+formSubmited.watch((e) => {
     e.preventDefault();
 });
+
+export {
+    $mainForm,
+    $isFormJsonValid,
+    $parsedFormJson,
+    $jsonInputValue,
+    inputChanged,
+    keyPressed,
+    formSubmited,
+    fieldsUpdated,
+};

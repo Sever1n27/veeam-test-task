@@ -9,9 +9,9 @@ export type Notification = {
 
 export type Notify = Omit<Notification, 'id'>;
 
-export const cancel = createEvent<number>();
-export const notify = createEvent<Notify>();
-export const $notifications = createStore<Notification[]>([]);
+const cancel = createEvent<number>();
+const notify = createEvent<Notify>();
+const $notifications = createStore<Notification[]>([]);
 
 const $id = createStore(0).on(notify, (prev) => prev + 1);
 const delay = ({ id, timeout = 3000 }: { id: number; timeout?: number }) =>
@@ -31,3 +31,5 @@ forward({ from: timeoutFx.doneData, to: cancel });
 
 $notifications.on(notified, (state, next) => state.concat(next).slice(-3));
 $notifications.on(cancel, (state, cancelId) => state.filter(({ id }) => id !== cancelId));
+
+export { cancel, notify, $notifications };

@@ -4,7 +4,7 @@ import { formatJson } from '../../helpers';
 
 const TAB_WIDTH = 4;
 
-export const handleChange = createEvent<React.FormEvent<HTMLInputElement>>();
+const inputChanged = createEvent<React.FormEvent<HTMLInputElement>>();
 
 const saveFormFx = createEffect((data: MainForm) => {
     localStorage.setItem('form_state', formatJson(data, TAB_WIDTH));
@@ -14,17 +14,19 @@ const loadFormFx = createEffect(() => {
     return data ? JSON.parse(data) : null;
 });
 
-export const $form = createStore<MainForm>({});
-export const $resultFormData = createStore<Record<string, string | boolean>>({})
+const $form = createStore<MainForm>({});
+const $formValues = createStore<Record<string, string | boolean>>({})
     .on(loadFormFx.doneData, (_, result) => result)
-    .on(handleChange, (state, e) => ({
+    .on(inputChanged, (state, e) => ({
         ...state,
         [e.currentTarget.name]: e.currentTarget.type === 'checkbox' ? e.currentTarget.checked : e.currentTarget.value,
     }));
 
 sample({
-    clock: $resultFormData,
+    clock: $formValues,
     target: saveFormFx,
 });
 
 loadFormFx();
+
+export { inputChanged, $form, $formValues };

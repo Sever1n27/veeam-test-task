@@ -5,10 +5,10 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import { TabPanel, a11yProps } from '@ui';
 import { Form, FormGenerator } from './ui';
-import { updateFields, $mainForm } from './model';
+import { fieldsUpdated, $mainForm } from './model';
 import { testJson } from './helpers';
 
-updateFields(testJson);
+fieldsUpdated(testJson);
 
 export function FormGeneratorFromJson() {
     const [currentTab, setTab] = React.useState(0);

@@ -1,11 +1,9 @@
 import { sample } from 'effector';
-import { $parsedFormJson, $isFormJsonValid, updateFields, $mainForm } from './ui/form-generator/model';
+import { $parsedFormJson, $isFormJsonValid, fieldsUpdated, $mainForm } from './ui/form-generator/model';
 import { $resultFormData } from './ui/form/model';
 
-export { updateFields, $mainForm };
-
 sample({
-    clock: updateFields,
+    clock: fieldsUpdated,
     source: $parsedFormJson.map((state) =>
         state?.items
             ? state.items.reduce(
@@ -20,3 +18,5 @@ sample({
     filter: $isFormJsonValid,
     target: $resultFormData,
 });
+
+export { fieldsUpdated, $mainForm };
