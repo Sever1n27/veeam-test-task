@@ -25,7 +25,7 @@ export const $jsonInputValue = createStore(JSON.stringify(testJson, null, 4))
         return e.target.value;
     })
     .on(handleKeyDown, (_, e) => {
-        const textArea = e.target;
+        const textArea = e.target as HTMLTextAreaElement;
         // handling tab
         if (e.key === 'Tab') {
             e.preventDefault();
