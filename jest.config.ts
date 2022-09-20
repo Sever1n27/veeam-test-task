@@ -9,6 +9,10 @@ const config: Config.InitialOptions = {
     },
     moduleNameMapper: {
         '@types': '<rootDir>/src/types/',
+        '@lib': '<rootDir>/src/shared/lib/',
+        '@entities': '<rootDir>/src/entities/',
+        '@ui': '<rootDir>/src/shared/ui/',
     },
+    collectCoverageFrom: ['src/**/*.ts'],
 };
 export default config;

@@ -1,4 +1,4 @@
-import { createEvent, createStore, sample, split } from 'effector';
+import { sample, split, createDomain } from 'effector';
 import { isJsonString } from '@lib';
 import { MainForm } from '@types';
 import { notify } from '@entities';
@@ -15,12 +15,14 @@ import text from './text.json';
 const TAB_WIDTH = 4;
 const TAB = ' '.repeat(TAB_WIDTH);
 
-const formSubmited = createEvent<React.FormEvent<HTMLFormElement>>();
-const inputChanged = createEvent<React.ChangeEvent<HTMLTextAreaElement>>();
-const keyPressed = createEvent<React.KeyboardEvent<HTMLTextAreaElement>>();
-const fieldsUpdated = createEvent<MainForm>();
+const formGeneratorDomain = createDomain();
+const formSubmited = formGeneratorDomain.createEvent<React.FormEvent<HTMLFormElement>>();
+const inputChanged = formGeneratorDomain.createEvent<React.ChangeEvent<HTMLTextAreaElement>>();
+const keyPressed = formGeneratorDomain.createEvent<React.KeyboardEvent<HTMLTextAreaElement>>();
+const fieldsUpdated = formGeneratorDomain.createEvent<MainForm>();
 
-const $jsonInputValue = createStore(JSON.stringify(testJson, null, 4))
+const $jsonInputValue = formGeneratorDomain
+    .createStore(JSON.stringify(testJson, null, 4))
     .on(inputChanged, (_, e) => {
         return e.target.value;
     })
@@ -50,14 +52,14 @@ const $jsonInputValue = createStore(JSON.stringify(testJson, null, 4))
         return textArea.value;
     });
 
-const $mainForm = createStore<MainForm>({}).on(fieldsUpdated, (_, json) => json);
+const $mainForm = formGeneratorDomain.createStore<MainForm>({}).on(fieldsUpdated, (_, json) => json);
 const $isFormJsonValid = sample({
     clock: formSubmited,
     source: $jsonInputValue,
     fn: (data) => isJsonString(data),
 });
 
-const $parsedFormJson = createStore<MainForm>({});
+const $parsedFormJson = formGeneratorDomain.createStore<MainForm>({});
 
 sample({
     clock: formSubmited,
@@ -123,4 +125,5 @@ export {
     keyPressed,
     formSubmited,
     fieldsUpdated,
+    formGeneratorDomain,
 };
