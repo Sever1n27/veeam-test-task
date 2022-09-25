@@ -1,20 +1,12 @@
 import { defineConfig } from 'vite';
 import path from 'path';
 import react from '@vitejs/plugin-react';
-import babel from 'vite-plugin-babel';
 
 const ROOT_PATH = path.join(__dirname, './src');
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [
-        react(),
-        babel({
-            babelConfig: {
-                plugins: ['effector/babel-plugin'],
-            },
-        }),
-    ],
+    plugins: [react()],
     resolve: {
         alias: {
             '@features': path.resolve(ROOT_PATH, 'features'),

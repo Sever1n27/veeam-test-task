@@ -3,17 +3,15 @@ import { isJsonString } from '@lib';
 import { MainForm } from '@types';
 import { notify } from '@entities';
 import {
-    closeChars,
-    closeQuotes,
     testJson,
     formatJson,
     hasWrongComponentType,
     missingLabelsOrNames,
+    textAreaKeyHandler,
+    TAB_WIDTH,
 } from '../../helpers';
-import text from './text.json';
 
-const TAB_WIDTH = 4;
-const TAB = ' '.repeat(TAB_WIDTH);
+import text from './text.json';
 
 const formGeneratorDomain = createDomain();
 const formSubmited = formGeneratorDomain.createEvent<React.FormEvent<HTMLFormElement>>();
@@ -26,31 +24,7 @@ const $jsonInputValue = formGeneratorDomain
     .on(inputChanged, (_, e) => {
         return e.target.value;
     })
-    .on(keyPressed, (_, e) => {
-        const textArea = e.target as HTMLTextAreaElement;
-        // handling tab
-        if (e.key === 'Tab') {
-            e.preventDefault();
-            textArea.setRangeText(TAB, textArea.selectionStart, textArea.selectionEnd, 'end');
-        }
-        // handling pair brackets
-        const closeChar = closeChars.get(e.key);
-        if (closeChar) {
-            e.preventDefault();
-            textArea.setRangeText(`${e.key}\n\n${closeChar}`, textArea.selectionStart, textArea.selectionEnd, 'end');
-            textArea.selectionEnd -= 2;
-            return textArea.value;
-        }
-        // handling pair quotes and replace single quotes
-        const closeQuote = closeQuotes.get(e.key);
-        if (closeQuote) {
-            e.preventDefault();
-            textArea.setRangeText(e.key + closeQuote, textArea.selectionStart, textArea.selectionEnd, 'end');
-            textArea.selectionEnd -= 1;
-            return textArea.value.replace(/[']/g, '"');
-        }
-        return textArea.value;
-    });
+    .on(keyPressed, textAreaKeyHandler);
 
 const $mainForm = formGeneratorDomain.createStore<MainForm>({}).on(fieldsUpdated, (_, json) => json);
 const $isFormJsonValid = sample({
@@ -126,4 +100,8 @@ export {
     formSubmited,
     fieldsUpdated,
     formGeneratorDomain,
+    invalidJson,
+    hasWrongTypes,
+    missingLabels,
+    validForm,
 };

@@ -2,6 +2,9 @@ import { MainForm, ComponentTypes, Field } from '@types';
 
 const availableComponentTypes = Object.values(ComponentTypes);
 
+export const TAB_WIDTH = 4;
+const TAB = ' '.repeat(TAB_WIDTH);
+
 export const closeChars = new Map([
     ['{', '}'],
     ['[', ']'],
@@ -61,3 +64,30 @@ export const missingLabelsOrNames = (items?: Field[]) => {
 };
 
 export const formatJson = (data: MainForm | null, tabWidth: number) => JSON.stringify(data, null, tabWidth);
+
+export const textAreaKeyHandler = (_: any, e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const textArea = e.target as HTMLTextAreaElement;
+    // handling tab
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        textArea.setRangeText(TAB, textArea.selectionStart, textArea.selectionEnd, 'end');
+    }
+    // handling pair brackets
+    const closeChar = closeChars.get(e.key);
+    if (closeChar) {
+        e.preventDefault();
+        textArea.setRangeText(`${e.key}\n\n${closeChar}`, textArea.selectionStart, textArea.selectionEnd, 'end');
+        textArea.selectionEnd -= 2;
+    }
+    // handling pair quotes and replace single quotes
+    const closeQuote = closeQuotes.get(e.key);
+    if (closeQuote) {
+        e.preventDefault();
+        const cursorPosition = textArea.selectionStart;
+        textArea.setRangeText(e.key + closeQuote, textArea.selectionStart, textArea.selectionEnd, 'end');
+        const value = textArea.value.replace(/[']/g, '"');
+        textArea.value = value;
+        textArea.selectionEnd = cursorPosition + 1;
+    }
+    return textArea.value;
+};

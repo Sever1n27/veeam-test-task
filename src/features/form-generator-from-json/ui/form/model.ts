@@ -1,25 +1,29 @@
-import { createEvent, createStore, createEffect, sample } from 'effector';
+import { sample, createDomain } from 'effector';
 import { MainForm } from '@types';
-import { formatJson } from '../../helpers';
+import { formatJson, TAB_WIDTH } from '../../helpers';
 
-const TAB_WIDTH = 4;
+const formDomain = createDomain();
 
-const inputChanged = createEvent<React.FormEvent<HTMLInputElement>>();
+const inputChanged = formDomain.createEvent<React.ChangeEvent<HTMLInputElement>>();
 
-const saveFormFx = createEffect((data: MainForm) => {
+const formInited = formDomain.createEvent();
+
+const saveFormFx = formDomain.createEffect((data: MainForm) => {
     localStorage.setItem('form_state', formatJson(data, TAB_WIDTH));
 });
-const loadFormFx = createEffect(() => {
+
+const loadFormFx = formDomain.createEffect(() => {
     const data = localStorage.getItem('form_state');
     return data ? JSON.parse(data) : null;
 });
 
-const $form = createStore<MainForm>({});
-const $formValues = createStore<Record<string, string | boolean>>({})
+const $form = formDomain.createStore<MainForm>({});
+const $formValues = formDomain
+    .createStore<Record<string, string | boolean>>({})
     .on(loadFormFx.doneData, (_, result) => result)
     .on(inputChanged, (state, e) => ({
         ...state,
-        [e.currentTarget.name]: e.currentTarget.type === 'checkbox' ? e.currentTarget.checked : e.currentTarget.value,
+        [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
     }));
 
 sample({
@@ -27,6 +31,11 @@ sample({
     target: saveFormFx,
 });
 
-loadFormFx();
+sample({
+    clock: formInited,
+    target: loadFormFx,
+});
 
-export { inputChanged, $form, $formValues };
+formInited();
+
+export { inputChanged, $form, $formValues, formDomain, saveFormFx, loadFormFx, formInited };

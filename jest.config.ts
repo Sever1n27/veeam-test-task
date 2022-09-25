@@ -5,7 +5,7 @@ const config: Config.InitialOptions = {
     preset: 'ts-jest',
     testEnvironment: 'node',
     transform: {
-        '^.+\\.tsx?$': 'ts-jest',
+        '^.+\\.ts$': 'babel-jest',
     },
     moduleNameMapper: {
         '@types': '<rootDir>/src/types/',
@@ -13,6 +13,6 @@ const config: Config.InitialOptions = {
         '@entities': '<rootDir>/src/entities/',
         '@ui': '<rootDir>/src/shared/ui/',
     },
-    collectCoverageFrom: ['src/**/*.ts'],
+    collectCoverageFrom: ['src/**/*.ts', '!src/**/index.ts'],
 };
 export default config;

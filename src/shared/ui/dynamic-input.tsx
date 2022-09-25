@@ -11,7 +11,7 @@ interface Props {
     type?: ComponentTypes;
     name: string;
     value: Record<string, string | boolean> | null;
-    onChange: (e: React.FormEvent<HTMLInputElement>) => void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     options?: { value: string; label: string }[];
 }
 
