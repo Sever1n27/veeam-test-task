@@ -50,6 +50,22 @@ export const testJson: MainForm = {
             name: 'testdate',
             label: 'date',
         },
+        {
+            type: ComponentTypes.Radio,
+            value: '',
+            name: 'testradio',
+            label: 'radioexample',
+            options: [
+                {
+                    value: '1',
+                    label: '1',
+                },
+                {
+                    value: '2',
+                    label: '2',
+                },
+            ],
+        },
     ],
 };
 
