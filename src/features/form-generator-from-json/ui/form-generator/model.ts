@@ -57,7 +57,7 @@ sample({
 });
 
 const { invalidJson, hasWrongTypes, missingLabels, validForm } = split($parsedFormJson, {
-    invalidJson: (form) => !form,
+    invalidJson: (form) => Object.keys(form).length === 0,
     hasWrongTypes: (form) => hasWrongComponentType(form?.items),
     missingLabels: (form) => missingLabelsOrNames(form?.items),
     validForm: (form) => Boolean(form) && !hasWrongComponentType(form?.items) && !missingLabelsOrNames(form?.items),

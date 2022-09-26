@@ -7,6 +7,7 @@ import {
     $parsedFormJson,
     hasWrongTypes,
     validForm,
+    invalidJson,
     $mainForm,
     fieldsUpdated,
 } from './model';
@@ -70,6 +71,21 @@ describe('form-generator', () => {
         const errorTriggered = jest.fn();
         hasWrongTypes.watch(errorTriggered);
         await allSettled(inputChanged, { scope, params: eventWithWrongType });
+        await allSettled(formSubmited, { scope, params: formEvent });
+        expect(errorTriggered).toBeCalledTimes(1);
+    });
+
+    test('should trigger invalid json error when bad string format presents', async () => {
+        const errorTriggered = jest.fn();
+        invalidJson.watch(errorTriggered);
+        await allSettled(inputChanged, {
+            scope,
+            params: {
+                target: {
+                    value: '{"title": "Пример формы","items"": [{"type": "unknown","value": "0","name: "asd","label": "testnumber"}]}',
+                },
+            } as React.ChangeEvent<HTMLTextAreaElement>,
+        });
         await allSettled(formSubmited, { scope, params: formEvent });
         expect(errorTriggered).toBeCalledTimes(1);
     });
